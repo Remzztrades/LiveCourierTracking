@@ -1,0 +1,63 @@
+openapi: 3.1.0
+info:
+  title: LiveCourierTracking API
+  version: 1.0.0
+  description: API for courier tracking system
+
+servers:
+  - url: http://localhost:3001/api
+
+paths:
+  /auth/login:
+    post:
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /couriers:
+    get:
+      summary: Get all couriers (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of couriers
+
+  /track/{trackingId}:
+    get:
+      summary: Public tracking info
+      parameters:
+        - name: trackingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tracking details
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
